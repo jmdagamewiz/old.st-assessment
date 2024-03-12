@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex</title>
+    <link rel="stylesheet" href="./main.css">
+    <script src="index.js"></script>
+</head>
+<body onload="getAndRenderFirst10Pokemons()">
+
+    <h1 class="header">Pokedex Catalogue</h1>
+
+    <div class="sort-filter-container">
+        <button type="button">Sort By ID</button>
+        <button type="button">Sort By Name</button>
+        <input type="text" placeholder="Filter Pokemons by ID / Name">
+        <button type="button">Filter</button>
+    </div>
+
+    <div class="card-view-list">
+
+        <!-- TODO: Implement Sorting functionality -->
+        <!-- TODO: Implement Filtering functionality -->
+
+        <!-- Card Template for Each Pokemon -->
+        <div class="card" onclick="createPageForPokemon(1)">
+            <img class="card-image" src="pikachu.png" alt="Pokemon Image">
+            <div class="container">
+                <p class="id">ID No.: 25</p>
+                <p class="name">Name: Pikachu</p>
+                <p class="type">Type: electric</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="load-container">
+        <button type="button" onclick="append10MorePokemons()">Load More</button>
+    </div>
+
+</body>
+</html>

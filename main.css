@@ -1,0 +1,70 @@
+* {
+    font-family: Roboto;
+    margin: 0px;
+    padding: 0px;
+}
+
+.header {
+    text-align: center;
+    padding: 20px;
+}
+
+.sort-filter-container {
+    padding: 10px 0px;
+    text-align: center;
+}
+
+button {
+    padding: 10px;
+}
+
+input {
+    padding: 10px;
+    width: 25%;
+}
+
+.card-view-list {
+    width: 100%;
+    text-align: center;
+    padding: 20px 0px;
+}
+
+.card {
+    display: inline-block;
+    border:3px solid #0075BE;
+    border-radius: 10px;
+    width: 30%;
+    margin: 10px 5px;
+    text-align: center;
+    cursor: pointer;
+    padding: 0px 0px 20px 0px;
+}
+
+.card-image {
+    width: 90%;
+}
+
+.load-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+/* Detailed View */
+
+.info-container {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 0px 0px 10px 0px;
+}
+
+.image {
+    width: 24%;
+}
+
+.directions-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
