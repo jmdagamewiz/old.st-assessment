@@ -1,17 +1,62 @@
 const API_URL = "https://pokeapi.co/api/v2/";
 let offset = 0;
-let isInitialLoad = true;
+let loadedPokemons = [];
+let filteredPokemons = [];
 
-async function getAndRenderPokemon(url) {
-    const response = await fetch(url);
-    const pokemon = await response.json();
 
-    console.log(pokemon);
+function filterPokemons() {
+    let search = document.getElementsByClassName("search-bar")[0].value;
 
-    let cardTemplate = document.getElementsByClassName("card")[0];
-    cardTemplate.style.display = "inline-block";
+    if (/^\d+$/.test(search)) {
+        filteredPokemons = loadedPokemons.filter(function(pokemon) {
+            return pokemon.id.toString().includes(search);
+        });
+    } else {
+        filteredPokemons = loadedPokemons.filter(function(pokemon) {
+            return pokemon.name.includes(search);
+        });
+    }
+
+    let cardListDiv = document.getElementsByClassName("card-view-list")[0];
+    cardListDiv.innerHTML = '';
+
+    for (pokemon of filteredPokemons) {
+        renderPokemon(pokemon);
+    }
+}
+
+function sortPokemonsByName() {
+    let cardListDiv = document.getElementsByClassName("card-view-list")[0];
+    cardListDiv.innerHTML = '';
+
+    loadedPokemons = loadedPokemons.sort(function(a, b) {
+        return a.name.localeCompare(b.name);
+    });
+
+    for (pokemon of loadedPokemons) {
+        renderPokemon(pokemon);
+    }
+}
+
+function sortPokemonsById() {
+    let cardListDiv = document.getElementsByClassName("card-view-list")[0];
+    cardListDiv.innerHTML = '';
+
+    loadedPokemons.sort(function(a, b) {
+        return a.id - b.id;
+    });
+
+    for (pokemon of loadedPokemons) {
+        renderPokemon(pokemon);
+    }
+}
+
+function renderPokemon(pokemon) {
+
+    let card = document.getElementsByTagName("template")[0];
+    const cardTemplate = card.content.querySelector("div");
+
     let newCard = cardTemplate.cloneNode(true);
-    cardTemplate.style.display = "none";
 
     let cardListDiv = document.getElementsByClassName("card-view-list")[0];
     cardListDiv.appendChild(newCard);
@@ -22,6 +67,15 @@ async function getAndRenderPokemon(url) {
     newCard.getElementsByClassName("type")[0].innerHTML = `Type: ${pokemon.types[0].type.name}`;
     newCard.getElementsByClassName("card-image")[0].src = pokemon.sprites.other.home.front_default;
     newCard.setAttribute('onclick', `createPageForPokemon(${pokemon.id})`);
+}
+
+async function getAndRenderPokemon(url) {
+    const response = await fetch(url);
+    const pokemon = await response.json();
+
+    loadedPokemons.push(pokemon);
+
+    renderPokemon(pokemon);
 }
 
 async function getAndRenderFirst10Pokemons() {
@@ -51,7 +105,6 @@ async function append10MorePokemons() {
 }
 
 async function createPageForPokemon(id) {
-    console.log(`Detailed Page for Pokemon ${id}`);
 
     const response = await fetch(API_URL + `pokemon/${id}/`);
     const pokemon = await response.json();
