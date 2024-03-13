@@ -64,7 +64,13 @@ function renderPokemon(pokemon) {
     newCard.classList.add(`card-${pokemon.id}`);
     newCard.getElementsByClassName("id")[0].innerHTML = `ID No.: ${pokemon.id}`;
     newCard.getElementsByClassName("name")[0].innerHTML = `Name: ${pokemon.name}`;
-    newCard.getElementsByClassName("type")[0].innerHTML = `Type: ${pokemon.types[0].type.name}`;
+
+    let types = [];
+    for (type of pokemon.types) {
+        types.push(type.type.name);
+    }
+
+    newCard.getElementsByClassName("type")[0].innerHTML = `Type/s: ${types.join(', ')}`;
     newCard.getElementsByClassName("card-image")[0].src = pokemon.sprites.other.home.front_default;
     newCard.setAttribute('onclick', `createPageForPokemon(${pokemon.id})`);
 }
@@ -74,6 +80,7 @@ async function getAndRenderPokemon(url) {
     const pokemon = await response.json();
 
     loadedPokemons.push(pokemon);
+    console.log(pokemon);
 
     renderPokemon(pokemon);
 }
@@ -113,6 +120,16 @@ async function createPageForPokemon(id) {
 
     // TODO: Add more information fields and list down types, abilities, stats instead of giving first only
 
+    let types = [];
+    for (type of pokemon.types) {
+        types.push(type.type.name);
+    }
+
+    let abilities = [];
+    for (ability of pokemon.abilities) {
+        abilities.push(ability.ability.name);
+    }
+
     opened.document.write(`
     <!DOCTYPE html>
     <html lang="en">
@@ -131,12 +148,20 @@ async function createPageForPokemon(id) {
             <img class="image" src="${pokemon.sprites.other.home.front_default}" alt="Pokemon Image">
             <div class="detailed-container">
                 <p>ID No.: ${pokemon.id}</p>
-                <p>Name: ${pokemon.id}</p>
+                <p>Name: ${pokemon.name}</p>
                 <p>Height: ${pokemon.height}</p>
                 <p>Base Experience: ${pokemon.base_experience}</p>
-                <p>Types: ${pokemon.types[0].type.name}</p>
-                <p>Abilities: ${pokemon.abilities[0].ability.name}</p>
-                <p>Stats: ${pokemon.stats[0].stat.name} - Base: ${pokemon.stats[0].base_stat}, Effort: ${pokemon.stats[0].effort}</p>
+                <p>Types: ${types.join(", ")}</p>
+                <p>Abilities: ${abilities.join(", ")}</p>
+                <p>Stats: </p>
+                <ul>
+                    <li>${pokemon.stats[0].stat.name}: ${pokemon.stats[0].base_stat}</li>
+                    <li>${pokemon.stats[1].stat.name}: ${pokemon.stats[1].base_stat}</li>
+                    <li>${pokemon.stats[2].stat.name}: ${pokemon.stats[2].base_stat}</li>
+                    <li>${pokemon.stats[3].stat.name}: ${pokemon.stats[3].base_stat}</li>
+                    <li>${pokemon.stats[4].stat.name}: ${pokemon.stats[4].base_stat}</li>
+                    <li>${pokemon.stats[5].stat.name}: ${pokemon.stats[5].base_stat}</li>
+                </ul>
             </div>
             <br>
             <div class="weaknesses-container">
