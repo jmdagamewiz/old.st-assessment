@@ -3,6 +3,12 @@ let offset = 0;
 let loadedPokemons = [];
 let filteredPokemons = [];
 
+let weaknesses = {
+    'normal': {},
+    'fighting': {},
+
+};
+
 
 function filterPokemons() {
     let search = document.getElementsByClassName("search-bar")[0].value;
@@ -111,18 +117,39 @@ async function append10MorePokemons() {
     offset += 10;
 }
 
+async function getType(name) {
+    // half_damage_to and no_damage_to
+    const response = await fetch(API_URL + `type/${name}/`);
+    const type = await response.json();
+
+    return type;
+}
+
 async function createPageForPokemon(id) {
 
     const response = await fetch(API_URL + `pokemon/${id}/`);
     const pokemon = await response.json();
 
+    await getType(pokemon.id);
+    console.log("Awaiting");
+
     var opened = window.open("");
 
-    // TODO: Add more information fields and list down types, abilities, stats instead of giving first only
-
     let types = [];
+    let weaknesses = new Set();
     for (type of pokemon.types) {
         types.push(type.type.name);
+        
+        typeObject = await getType(type.type.name);
+        
+        // These two combined contain all weaknesses of a given type.
+        for (weakness of typeObject.damage_relations.half_damage_to) {
+            weaknesses.add(weakness.name);
+        }
+
+        for (weakness of typeObject.damage_relations.no_damage_to) {
+            weaknesses.add(weakness.name);
+        }
     }
 
     let abilities = [];
@@ -165,7 +192,7 @@ async function createPageForPokemon(id) {
             </div>
             <br>
             <div class="weaknesses-container">
-                Weaknesses: {weaknesses here}
+                Weaknesses: ${Array.from(weaknesses).join(", ")}
             </div>
         </div>
 
